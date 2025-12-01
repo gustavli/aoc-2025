@@ -9,10 +9,14 @@ export const part_1 = (input: string): number => {
 
     lines.forEach(line => {
         const direction = line.charAt(0)
-        const rotations = Number(line.slice(1)) % 100
+        const rotations = Number(line.slice(1))
+        const full_rotations = rotations / 100
+        const changes = rotations % 100
+        
 
-        current_location = move(current_location,direction==="L" ? "LEFT" : "RIGHT", rotations)
+        current_location = move(current_location,direction==="L" ? "LEFT" : "RIGHT", changes)
 
+        zero_indices +=full_rotations
         if(current_location === 0) zero_indices++
     })
 
