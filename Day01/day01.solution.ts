@@ -9,14 +9,10 @@ export const part_1 = (input: string): number => {
 
     lines.forEach(line => {
         const direction = line.charAt(0)
-        const rotations = Number(line.slice(1))
-        const full_rotations = rotations / 100
-        const changes = rotations % 100
-        
+        const rotations = Number(line.slice(1)) % 100
 
-        current_location = move(current_location,direction==="L" ? "LEFT" : "RIGHT", changes)
+        current_location = move(current_location,direction==="L" ? "LEFT" : "RIGHT", rotations)
 
-        zero_indices +=full_rotations
         if(current_location === 0) zero_indices++
     })
 
@@ -24,8 +20,32 @@ export const part_1 = (input: string): number => {
 }
 
 export const part_2 = (input: string): number => {
-    return 1
-}
+    const lines = read_input(input)
+
+    let current_location = 50
+    let zero_indices = 0
+
+    lines.forEach(line => {
+        const direction = line.charAt(0)
+        const rotations = Number(line.slice(1))
+        const full_rotations = Math.floor(rotations / 100)
+        const changes = rotations % 100
+
+        if (full_rotations > 0) zero_indices +=full_rotations
+
+        if (direction === "L") {
+            if(changes >= current_location && current_location!=0) 
+                zero_indices++
+            
+            current_location = move(current_location,"LEFT",changes)
+        }else {
+            if(current_location+changes > 99) 
+                zero_indices++
+            current_location = move(current_location,"RIGHT",changes)
+        }
+    })
+
+    return zero_indices}
 
 const read_input = (input:string): string[] => {
     return input.split("\n")
@@ -76,4 +96,11 @@ L99
 R14
 L82`)
 assertEquals(res.length,10)
+})
+
+Deno.test("p2", () => {
+    assertEquals(part_2(`R1000`),10)
+    assertEquals(part_2(`R1050`),11)
+    assertEquals(part_2(`L1000`),10)
+    assertEquals(part_2(`L1050`),11)
 })
