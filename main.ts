@@ -1,8 +1,12 @@
-export function add(a: number, b: number): number {
-  return a + b;
+
+interface DaySolution {
+  day: number
+  input: string,
+  part1: (input: string) => number
+  part2: (input: string) => number
 }
 
-// Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
+
 if (import.meta.main) {
-  console.log("Add 2 + 3 =", add(2, 3));
+  console.log("AOC 2025");
 }
