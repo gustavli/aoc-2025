@@ -12,9 +12,9 @@ export const generate_day = (year: number, day: number) => {
     const newSolutionFilePath = `${basePath}.solution.ts`
     const newIndexFilePath = `${path}/index.ts`
 
-    Deno.copyFileSync("./template/input.template.ts", newInputFilePath)
-    Deno.copyFileSync("./template/solution.template.ts", newSolutionFilePath)
-    Deno.copyFileSync("./template/index.template.ts", newIndexFilePath)
+    Deno.copyFileSync("./template/input.template", newInputFilePath)
+    Deno.copyFileSync("./template/solution.template", newSolutionFilePath)
+    Deno.copyFileSync("./template/index.template", newIndexFilePath)
 
 
     const decoder = new TextDecoder("utf-8")
@@ -22,13 +22,12 @@ export const generate_day = (year: number, day: number) => {
 
     // Rewrite input import in dayX.solution.ts
     const old_solution_data = decoder.decode(Deno.readFileSync(newSolutionFilePath))
-    const new_solution_data = old_solution_data.replace("dayX", `day${dayPadded}`)
+    const new_solution_data = old_solution_data.replaceAll("dayX", `day${dayPadded}`)
     Deno.writeFileSync(newSolutionFilePath, encoder.encode(new_solution_data))
 
     // Rewrite DayX in index file
     const old_index_data = decoder.decode(Deno.readFileSync(newIndexFilePath))
-    const new_index_data = old_index_data.replace("dayX", `day${dayPadded}`)
-    console.log(new_index_data)
+    const new_index_data = old_index_data.replaceAll("dayX", `day${dayPadded}`)
     Deno.writeFileSync(newIndexFilePath, encoder.encode(new_index_data))
 }
 
@@ -39,5 +38,10 @@ if (import.meta.main) {
     const year = Number(args[0])
     const day = Number(args[1])
 
-    generate_day(year, day)
+    try {
+        generate_day(year, day)
+        console.log("Generated day")
+    } catch (err) {
+        console.log("Failed generating day", err)
+    }
 }
