@@ -6,6 +6,12 @@ interface Coordinate {
     y: number
 }
 
+interface Square {
+    a: Coordinate
+    b: Coordinate
+    size: number
+}
+
 const area = (a: Coordinate, b: Coordinate): number => (Math.abs(b.x - a.x) + 1) * (Math.abs(b.y - a.y) + 1)
 
 const part_1 = (input: string): number => {
@@ -14,15 +20,16 @@ const part_1 = (input: string): number => {
         return { x, y }
     })
 
-    let max = 0
+    let squares: Square[] = []
     for (let i = 0; i < coordinates.length; i++) {
         for (let j = i; j < coordinates.length; j++) {
             const square_area = area(coordinates[i], coordinates[j])
-            if (square_area > max) max = square_area
+            squares.push({ a: coordinates[i], b: coordinates[j], size: square_area })
         }
     }
 
-    return max
+    return squares.sort((a, b) => b.size - a.size)[0].size
+
 }
 
 const part_2 = (input: string): number => {
@@ -30,6 +37,17 @@ const part_2 = (input: string): number => {
         const [x, y] = line.split(",").map(Number)
         return { x, y }
     })
+
+    let squares: Square[] = []
+    for (let i = 0; i < coordinates.length; i++) {
+        for (let j = i; j < coordinates.length; j++) {
+            const square_area = area(coordinates[i], coordinates[j])
+            squares.push({ a: coordinates[i], b: coordinates[j], size: square_area })
+        }
+    }
+    squares.sort((a, b) => b.size - a.size)
+
+
     return 0
 }
 
